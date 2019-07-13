@@ -1,6 +1,6 @@
-'use strict';
-const os = require('os');
-const electron = require('electron');
+"use strict";
+const os = require("os");
+const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const shell = electron.shell;
@@ -9,7 +9,7 @@ const appName = app.getName();
 function sendAction(action) {
 	const win = BrowserWindow.getAllWindows()[0];
 
-	if (process.platform === 'darwin') {
+	if (process.platform === "darwin") {
 		win.restore();
 	}
 
@@ -17,37 +17,37 @@ function sendAction(action) {
 }
 
 module.exports = function(config) {
-	const locale = require('../resources/languages/'+config.get('locale'));
+	const locale = require("../resources/languages/" + config.get("locale"));
 	const helpSubmenu = [
 		{
-			label: `&`+locale['menu.help[0]'],
+			label: `&` + locale["menu.help[0]"],
 			click() {
-				shell.openExternal('https://rambox.pro');
+				shell.openExternal("https://rambox.pro");
 			}
 		},
 		{
 			label: `&Facebook`,
 			click() {
-				shell.openExternal('https://www.facebook.com/ramboxapp');
+				shell.openExternal("https://www.facebook.com/ramboxapp");
 			}
 		},
 		{
 			label: `&Twitter`,
 			click() {
-				shell.openExternal('https://www.twitter.com/ramboxapp');
+				shell.openExternal("https://www.twitter.com/ramboxapp");
 			}
 		},
 		{
 			label: `&GitHub`,
 			click() {
-				shell.openExternal('https://github.com/ramboxapp/community-edition');
+				shell.openExternal("https://github.com/ramboxapp/community-edition");
 			}
 		},
 		{
-			type: 'separator'
+			type: "separator"
 		},
 		{
-			label: '&'+locale['menu.help[1]'],
+			label: "&" + locale["menu.help[1]"],
 			click() {
 				const body = `
 	<!-- Please describe here your issue and steps to reproduce it. -->
@@ -60,13 +60,17 @@ module.exports = function(config) {
 	> Electron ${process.versions.electron}
 	> ${process.platform} ${process.arch} ${os.release()}`;
 
-				shell.openExternal(`https://github.com/ramboxapp/community-edition/issues/new?body=${encodeURIComponent(body)}`);
+				shell.openExternal(
+					`https://github.com/ramboxapp/community-edition/issues/new?body=${encodeURIComponent(
+						body
+					)}`
+				);
 			}
 		},
 		{
-			label: `&`+locale['menu.help[2]'],
+			label: `&` + locale["menu.help[2]"],
 			click() {
-				shell.openExternal('https://rambox.typeform.com/to/t7jc4C');
+				shell.openExternal("https://rambox.typeform.com/to/t7jc4C");
 			}
 		},
 		{
@@ -83,129 +87,127 @@ module.exports = function(config) {
 				{
 					label: `&Clear Local Storage`,
 					click(item, win) {
-						win.webContents.session.clearStorageData({
-							storages: ['localstorage']
-						}, function() {
-							win.reload();
-						});
+						win.webContents.session.clearStorageData(
+							{
+								storages: ["localstorage"]
+							},
+							function() {
+								win.reload();
+							}
+						);
 					}
 				}
 			]
 		},
 		{
-			type: 'separator'
-		},
-		{
-			label: `&`+locale['menu.help[3]'],
-			click() {
-				shell.openExternal('https://rambox.pro/#donate');
-			}
+			type: "separator"
 		}
 	];
 
 	let tpl = [
 		{
-			label: '&'+locale['menu.edit[0]'],
+			label: "&" + locale["menu.edit[0]"],
 			submenu: [
 				{
-					 role: 'undo'
-					,label: locale['menu.edit[1]']
+					role: "undo",
+					label: locale["menu.edit[1]"]
 				},
 				{
-					 role: 'redo'
-					,label: locale['menu.edit[2]']
+					role: "redo",
+					label: locale["menu.edit[2]"]
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					 role: 'cut'
-					,label: locale['menu.edit[3]']
+					role: "cut",
+					label: locale["menu.edit[3]"]
 				},
 				{
-					 role: 'copy'
-					,label: locale['menu.edit[4]']
+					role: "copy",
+					label: locale["menu.edit[4]"]
 				},
 				{
-					 role: 'paste'
-					,label: locale['menu.edit[5]']
+					role: "paste",
+					label: locale["menu.edit[5]"]
 				},
 				{
-					role: 'pasteandmatchstyle'
+					role: "pasteandmatchstyle"
 				},
 				{
-					 role: 'selectall'
-					,label: locale['menu.edit[6]']
+					role: "selectall",
+					label: locale["menu.edit[6]"]
 				},
 				{
-					role: 'delete'
+					role: "delete"
 				}
 			]
 		},
 		{
-			label: '&'+locale['menu.view[0]'],
+			label: "&" + locale["menu.view[0]"],
 			submenu: [
 				{
-					label: '&'+locale['menu.view[1]'],
-					accelerator: 'CmdOrCtrl+R',
+					label: "&" + locale["menu.view[1]"],
+					accelerator: "CmdOrCtrl+R",
 					click(item, focusedWindow) {
 						if (focusedWindow) focusedWindow.reload();
 					}
 				},
 				{
-					label: '&Reload current Service',
-					accelerator: 'CmdOrCtrl+Shift+R',
+					label: "&Reload current Service",
+					accelerator: "CmdOrCtrl+Shift+R",
 					click() {
-						sendAction('reloadCurrentService');
+						sendAction("reloadCurrentService");
 					}
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					label: '&Toggle Status Bar',
+					label: "&Toggle Status Bar",
 					click() {
-						sendAction('toggleStatusBar');
+						sendAction("toggleStatusBar");
 					}
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					role: 'zoomin'
+					role: "zoomin"
 				},
 				{
-					role: 'zoomout'
+					role: "zoomout"
 				},
 				{
-					role: 'resetzoom'
+					role: "resetzoom"
 				}
 			]
 		},
 		{
-			label: '&'+locale['menu.window[0]'],
-			role: 'window',
+			label: "&" + locale["menu.window[0]"],
+			role: "window",
 			submenu: [
 				{
-					label: '&'+locale['menu.window[1]'],
-					accelerator: 'CmdOrCtrl+M',
-					role: 'minimize'
+					label: "&" + locale["menu.window[1]"],
+					accelerator: "CmdOrCtrl+M",
+					role: "minimize"
 				},
 				{
-					label: '&'+locale['menu.window[2]'],
-					accelerator: 'CmdOrCtrl+W',
-					role: 'close'
+					label: "&" + locale["menu.window[2]"],
+					accelerator: "CmdOrCtrl+W",
+					role: "close"
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					 role: 'togglefullscreen'
-					,label: locale['menu.view[2]']
+					role: "togglefullscreen",
+					label: locale["menu.view[2]"]
 				},
 				{
-					label: '&'+locale['menu.view[3]'],
-					accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+					label: "&" + locale["menu.view[3]"],
+					accelerator:
+						process.platform === "darwin" ? "Alt+Command+I" : "Ctrl+Shift+I",
 					click(item, focusedWindow) {
 						if (focusedWindow) focusedWindow.webContents.toggleDevTools();
 					}
@@ -213,105 +215,105 @@ module.exports = function(config) {
 			]
 		},
 		{
-			label: '&'+locale['menu.help[4]'],
-			role: 'help'
+			label: "&" + locale["menu.help[4]"],
+			role: "help"
 		}
 	];
 
-	if (process.platform === 'darwin') {
+	if (process.platform === "darwin") {
 		tpl.unshift({
 			label: appName,
 			submenu: [
 				{
-					label: locale['preferences[0]'],
+					label: locale["preferences[0]"],
 					click() {
-						sendAction('showPreferences')
+						sendAction("showPreferences");
 					}
 				},
 				{
-					label: locale['menu.help[5]'],
-					visible: process.argv.indexOf('--without-update') === -1,
+					label: locale["menu.help[5]"],
+					visible: process.argv.indexOf("--without-update") === -1,
 					click(item, win) {
 						const webContents = win.webContents;
 						const send = webContents.send.bind(win.webContents);
-						send('autoUpdater:check-update');
+						send("autoUpdater:check-update");
 					}
 				},
 				{
-					label: locale['menu.help[6]'],
+					label: locale["menu.help[6]"],
 					click() {
-						sendAction('showAbout')
+						sendAction("showAbout");
 					}
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					label: locale['menu.osx[0]'],
-					role: 'services',
+					label: locale["menu.osx[0]"],
+					role: "services",
 					submenu: []
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					label: locale['menu.osx[1]'],
-					accelerator: 'Command+H',
-					role: 'hide'
+					label: locale["menu.osx[1]"],
+					accelerator: "Command+H",
+					role: "hide"
 				},
 				{
-					label: locale['menu.osx[2]'],
-					accelerator: 'Command+Alt+H',
-					role: 'hideothers'
+					label: locale["menu.osx[2]"],
+					accelerator: "Command+Alt+H",
+					role: "hideothers"
 				},
 				{
-					label: locale['menu.osx[3]'],
-					role: 'unhide'
+					label: locale["menu.osx[3]"],
+					role: "unhide"
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					role: 'quit',
-					label: locale['tray[1]']
+					role: "quit",
+					label: locale["tray[1]"]
 				}
 			]
 		});
 	} else {
 		tpl.unshift({
-			label: '&'+locale['menu.file[0]'],
+			label: "&" + locale["menu.file[0]"],
 			submenu: [
 				{
-					label: locale['preferences[0]'],
+					label: locale["preferences[0]"],
 					click() {
-						sendAction('showPreferences')
+						sendAction("showPreferences");
 					}
 				},
 				{
-					type: 'separator'
+					type: "separator"
 				},
 				{
-					role: 'quit',
-					label: locale['menu.file[1]']
+					role: "quit",
+					label: locale["menu.file[1]"]
 				}
 			]
 		});
 		helpSubmenu.push({
-			type: 'separator'
+			type: "separator"
 		});
 		helpSubmenu.push({
-			label: `&`+locale['menu.help[5]'],
-			visible: process.argv.indexOf('--without-update') === -1,
+			label: `&` + locale["menu.help[5]"],
+			visible: process.argv.indexOf("--without-update") === -1,
 			click(item, win) {
 				const webContents = win.webContents;
 				const send = webContents.send.bind(win.webContents);
-				send('autoUpdater:check-update');
+				send("autoUpdater:check-update");
 			}
 		});
 		helpSubmenu.push({
-			label: `&`+locale['menu.help[6]'],
+			label: `&` + locale["menu.help[6]"],
 			click() {
-				sendAction('showAbout')
+				sendAction("showAbout");
 			}
 		});
 	}

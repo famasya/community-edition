@@ -1,88 +1,100 @@
 var auth0, lock; // Auth0 vars
 // Enable Cookies
-var ElectronCookies = require('@exponent/electron-cookies');
-ElectronCookies.enable({ origin: 'http://rambox.pro' });
+var ElectronCookies = require("@exponent/electron-cookies");
+ElectronCookies.enable({ origin: "http://rambox.pro" });
 
 // Sencha App
-Ext.setGlyphFontFamily('FontAwesome');
+Ext.setGlyphFontFamily("FontAwesome");
 Ext.application({
-	 name: 'Rambox'
+	name: "Rambox",
 
-	,extend: 'Rambox.Application'
+	extend: "Rambox.Application",
 
-	,autoCreateViewport: 'Rambox.view.main.Main'
+	autoCreateViewport: "Rambox.view.main.Main"
 });
 
 // auto update logic
-const ipc = require('electron').ipcRenderer;
+const ipc = require("electron").ipcRenderer;
 
-const { ContextMenuBuilder, ContextMenuListener } = require('electron-contextmenu-wrapper');
+const {
+	ContextMenuBuilder,
+	ContextMenuListener
+} = require("electron-contextmenu-wrapper");
 const contextMenuBuilder = new ContextMenuBuilder();
 const contextMenuListener = new ContextMenuListener(function(event, info) {
 	contextMenuBuilder.showPopupMenu(info);
 });
 
-ipc.on('showAbout', function(event, message) {
-	!Ext.cq1('about') ? Ext.create('Rambox.view.main.About') : '';
+ipc.on("showAbout", function(event, message) {
+	!Ext.cq1("about") ? Ext.create("Rambox.view.main.About") : "";
 });
-ipc.on('showPreferences', function(event, message) {
-	!Ext.cq1('preferences') ? Ext.create('Rambox.view.preferences.Preferences').show() : '';
+ipc.on("showPreferences", function(event, message) {
+	!Ext.cq1("preferences")
+		? Ext.create("Rambox.view.preferences.Preferences").show()
+		: "";
 });
-ipc.on('autoUpdater:check-update', function() {
-	Rambox.app.checkUpdate();
-});
-ipc.on('autoUpdater:update-not-available', function() {
+ipc.on("autoUpdater:update-not-available", function() {
 	Ext.Msg.show({
-		 title: 'You are up to date!'
-		,message: 'You have the latest version of Rambox.'
-		,icon: Ext.Msg.INFO
-		,buttons: Ext.Msg.OK
+		title: "You are up to date!",
+		message: "You have the latest version of Rambox.",
+		icon: Ext.Msg.INFO,
+		buttons: Ext.Msg.OK
 	});
 });
-ipc.on('autoUpdater:update-available', function() {
+ipc.on("autoUpdater:update-available", function() {
 	Ext.Msg.show({
-		 title: 'New Version available!'
-		,message: 'Please wait until Rambox download the new version and ask you for install it.'
-		,icon: Ext.Msg.INFO
-		,buttons: Ext.Msg.OK
+		title: "New Version available!",
+		message:
+			"Please wait until Rambox download the new version and ask you for install it.",
+		icon: Ext.Msg.INFO,
+		buttons: Ext.Msg.OK
 	});
 });
-ipc.on('autoUpdater:update-downloaded', function(e, info) {
-	console.log('Update downloaded!', info);
-	Ext.cq1('app-main').addDocked({
-		 xtype: 'toolbar'
-		,dock: 'top'
-		,ui: 'newversion'
-		,items: [
-			'->'
-			,{
-				 xtype: 'label'
-				,html: '<b>New version ready to install ('+info.version+')!</b> It will be installed the next time Rambox is relaunched.'
-			}
-			,{
-				 xtype: 'button'
-				,text: 'Relaunch Now'
-				,handler: function(btn) { ipc.send('autoUpdater:quit-and-install'); }
-			}
-			,{
-				 xtype: 'button'
-				,text: 'Changelog'
-				,ui: 'decline'
-				,href: 'https://github.com/ramboxapp/community-edition/releases/tag/'+info.version
-			}
-			,'->'
-			,{
-				 glyph: 'xf00d@FontAwesome'
-				,baseCls: ''
-				,style: 'cursor:pointer;'
-				,handler: function(btn) { Ext.cq1('app-main').removeDocked(btn.up('toolbar'), true); }
+ipc.on("autoUpdater:update-downloaded", function(e, info) {
+	console.log("Update downloaded!", info);
+	Ext.cq1("app-main").addDocked({
+		xtype: "toolbar",
+		dock: "top",
+		ui: "newversion",
+		items: [
+			"->",
+			{
+				xtype: "label",
+				html:
+					"<b>New version ready to install (" +
+					info.version +
+					")!</b> It will be installed the next time Rambox is relaunched."
+			},
+			{
+				xtype: "button",
+				text: "Relaunch Now",
+				handler: function(btn) {
+					ipc.send("autoUpdater:quit-and-install");
+				}
+			},
+			{
+				xtype: "button",
+				text: "Changelog",
+				ui: "decline",
+				href:
+					"https://github.com/ramboxapp/community-edition/releases/tag/" +
+					info.version
+			},
+			"->",
+			{
+				glyph: "xf00d@FontAwesome",
+				baseCls: "",
+				style: "cursor:pointer;",
+				handler: function(btn) {
+					Ext.cq1("app-main").removeDocked(btn.up("toolbar"), true);
+				}
 			}
 		]
 	});
 });
 
 // Set Badge in taskbar for Windows
-ipc.on('setBadge', function(event, messageCount) {
+ipc.on("setBadge", function(event, messageCount) {
 	messageCount = messageCount.toString();
 	var canvas = document.createElement("canvas");
 	canvas.height = 140;
@@ -96,12 +108,12 @@ ipc.on('setBadge', function(event, messageCount) {
 	ctx.fillStyle = "white";
 
 	var ranges = [
-		{ divider: 1e18 , suffix: 'P' },
-		{ divider: 1e15 , suffix: 'E' },
-		{ divider: 1e12 , suffix: 'T' },
-		{ divider: 1e9 , suffix: 'G' },
-		{ divider: 1e6 , suffix: 'M' },
-		{ divider: 1e3 , suffix: 'k' }
+		{ divider: 1e18, suffix: "P" },
+		{ divider: 1e15, suffix: "E" },
+		{ divider: 1e12, suffix: "T" },
+		{ divider: 1e9, suffix: "G" },
+		{ divider: 1e6, suffix: "M" },
+		{ divider: 1e3, suffix: "k" }
 	];
 
 	function formatNumber(n) {
@@ -128,22 +140,28 @@ ipc.on('setBadge', function(event, messageCount) {
 		ctx.fillText("" + formatNumber(messageCount), 70, 98);
 	}
 
-	ipc.send('setBadge', messageCount, canvas.toDataURL());
+	ipc.send("setBadge", messageCount, canvas.toDataURL());
 });
 // Reload Current Service
-ipc.on('reloadCurrentService', function(e) {
-	var tab = Ext.cq1('app-main').getActiveTab();
-	if ( tab.id !== 'ramboxTab' ) tab.reloadService();
+ipc.on("reloadCurrentService", function(e) {
+	var tab = Ext.cq1("app-main").getActiveTab();
+	if (tab.id !== "ramboxTab") tab.reloadService();
 });
 // Toggle Status Bar
-ipc.on('toggleStatusBar', function() {
-	var tab = Ext.cq1('app-main').getActiveTab();
+ipc.on("toggleStatusBar", function() {
+	var tab = Ext.cq1("app-main").getActiveTab();
 
-	if ( tab.id !== 'ramboxTab' ) {
-		tab.down('statusbar').closed ? tab.setStatusBar(tab.record.get('statusbar')) : tab.closeStatusBar();
+	if (tab.id !== "ramboxTab") {
+		tab.down("statusbar").closed
+			? tab.setStatusBar(tab.record.get("statusbar"))
+			: tab.closeStatusBar();
 	}
 });
 // Focus the current service when Alt + Tab or click in webviews textfields
-window.addEventListener('focus', function() {
-	if(Ext.cq1("app-main")) Ext.cq1("app-main").getActiveTab().down('component').el.dom.focus();
+window.addEventListener("focus", function() {
+	if (Ext.cq1("app-main"))
+		Ext.cq1("app-main")
+			.getActiveTab()
+			.down("component")
+			.el.dom.focus();
 });
